@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const DashboardPage = () => {
+const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,4 +99,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default AllUsers;

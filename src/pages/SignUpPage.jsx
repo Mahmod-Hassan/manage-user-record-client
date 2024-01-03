@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,7 +14,7 @@ const SignupPage = () => {
     city: "Mumbai",
     state: "",
   });
-
+  const [error, setError] = useState("");
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -33,7 +35,7 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can perform form submission logic here
+
     fetch("http://localhost:4000/signup", {
       method: "POST",
       headers: {
@@ -42,13 +44,26 @@ const SignupPage = () => {
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        if (data?.email) {
+          setError("");
+          toast.success("congratulation!! signup successful");
+          navigate("/dashboard");
+        } else {
+          setError(data.message);
+        }
+      })
+      .catch((err) => setError(err.message));
   };
 
   return (
     <div className="md:flex justify-center items-center md:h-screen">
       <div className="bg-white p-6 shadow-md">
+        {error && (
+          <p className="bg-red-100 p-1 text-center text-lg text-red-500">
+            {error}
+          </p>
+        )}
         <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
         <form onSubmit={handleSubmit} className="md:grid grid-cols-2 gap-5">
           {/* name input */}
@@ -96,7 +111,7 @@ const SignupPage = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-600"
             >
-              Email
+              Password
             </label>
             <input
               type="password"
@@ -257,18 +272,19 @@ const SignupPage = () => {
           <div className="mt-4">
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded-md"
+              className="w-full bg-blue-500 text-white py-2 px-4"
             >
-              Save
+              Create Account
             </button>
           </div>
+
+          <p className="text-center mt-4">
+            Already have an accout?{" "}
+            <Link className="text-blue-500" to="/login">
+              Please Login
+            </Link>
+          </p>
         </form>
-        <p className="text-center">
-          Already have an accout?{" "}
-          <Link className="text-blue-500" to="/login">
-            Login
-          </Link>
-        </p>
       </div>
     </div>
   );

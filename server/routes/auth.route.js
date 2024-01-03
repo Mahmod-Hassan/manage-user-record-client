@@ -11,7 +11,7 @@ router.post('/signup', async (req, res) => {
     try {
         const oldUser = await User.findOne({email});
         if(oldUser){
-          return res.send({error: 'user already exist'})
+          return res.send({message: 'user already exist'})
         }else{
             const hashPassword = await bcrypt.hash(password, 10);
             const newUser = new User({

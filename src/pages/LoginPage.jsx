@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [useInfo, setUseInfo] = useState({
     email: "",
     password: "",
@@ -16,8 +19,21 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can perform login logic here
-    console.log(useInfo);
+    fetch("http://localhost:4000/login", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(useInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.email) {
+          toast.success("Welcome!! AGAIN");
+          navigate("/dashboard");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -68,6 +84,12 @@ const LoginPage = () => {
             </button>
           </div>
         </form>
+        <p className="text-center mt-4">
+          No account??{" "}
+          <Link className="text-blue-500" to="/">
+            create an account
+          </Link>
+        </p>
       </div>
     </div>
   );
