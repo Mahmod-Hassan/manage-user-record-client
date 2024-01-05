@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
+import { savedUser } from "../utils/savedUser";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,27 +36,18 @@ const SignupPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    fetch("http://localhost:4000/signup", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.email) {
-          setError("");
-          toast.success("congratulation!! signup successful");
-          navigate("/dashboard");
-        } else {
-          setError(data.message);
-        }
-      })
-      .catch((err) => setError(err.message));
+    const data = await savedUser(formData);
+    if (data?.email) {
+      setError("");
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
+      toast.success("congratulation!! signup successful");
+      navigate("/dashboard");
+    } else {
+      setError(data.message);
+    }
   };
 
   return (

@@ -1,42 +1,61 @@
 import React, { useEffect, useState } from "react";
+import SingleUser from "./SingleUser";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(filter);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch("http://localhost:4000/users")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setLoading(false);
+  //       setUsers(data);
+  //     });
+  // }, []);
+
+  const fetchUsers = () => {
+    setLoading(true);
+    fetch("http://localhost:4000/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setLoading(false);
+        setUsers(data);
+      });
+  };
+
   useEffect(() => {
-    const data = [
-      {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "123-456-7890",
-      },
-      {
-        id: 2,
-        name: "Mahmod Hasan",
-        email: "mahmod@gmail.com",
-        phone: "01314890047",
-      },
-      // Add more users as needed
-    ];
-    setUsers(data);
+    fetchUsers();
   }, []);
-  const sortByLetter = (a, b) => {
-    if (filter === "az") {
-      return a.name - b.name;
-    } else if (filter === "za") {
-      return a.name + b.name;
-    }
-    return 0;
+  if (loading) {
+    return "Loading..";
+  }
+
+  const filterByNameAndEmail = (user) => {
+    return (
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
 
   const handleSearchChange = (value) => {
     setSearchTerm(value);
     // Implement search logic
   };
-
+  const sortUser = (a, b) => {
+    switch (filter) {
+      case "az":
+        return a.name.localeCompare(b.name);
+      case "za":
+        return b.name.localeCompare(a.name);
+      // Add more cases for other sorting criteria
+      default:
+        return 0;
+    }
+  };
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">All users record</h1>
@@ -68,6 +87,8 @@ const AllUsers = () => {
             <th className="border p-2">Name</th>
             <th className="border p-2">Email</th>
             <th className="border p-2">Phone</th>
+            <th className="border p-2">Edit</th>
+            <th className="border p-2">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -77,20 +98,14 @@ const AllUsers = () => {
             </tr>
           ) : (
             users
-              .filter(
-                (user) =>
-                  user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  user.phone.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-              .sort(sortByLetter)
+              .sort(sortUser)
+              .filter(filterByNameAndEmail)
               .map((user) => (
-                <tr key={user.id}>
-                  <td className="border px-4 py-1">{user.name}</td>
-                  <td className="border px-4 py-1">{user.email}</td>
-                  <td className="border px-4 py-1">{user.phone}</td>
-                  {/* Add more details or buttons for View/Edit/Delete */}
-                </tr>
+                <SingleUser
+                  fetchUsers={fetchUsers}
+                  key={user?.email}
+                  user={user}
+                />
               ))
           )}
         </tbody>
