@@ -48,7 +48,13 @@ const SingleUser = ({ user, fetchUsers }) => {
           Delete
         </td>
       </tr>
-      {openModal && <Modal setOpenModal={setOpenModal} user={user} />}
+      {openModal && (
+        <Modal
+          fetchUsers={fetchUsers}
+          setOpenModal={setOpenModal}
+          user={user}
+        />
+      )}
     </>
   );
 };

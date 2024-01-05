@@ -51,7 +51,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="md:flex justify-center items-center md:h-screen">
+    <div className="md:flex justify-center items-center md:h-screen p-5 md:p-0">
       <div className="bg-white p-6 shadow-md">
         {error && (
           <p className="bg-red-100 p-1 text-center text-lg text-red-500">

@@ -5,8 +5,8 @@ import { AuthContext } from "../../context/AuthProvider";
 const LeftSidebar = () => {
   const { logout } = useContext(AuthContext);
   return (
-    <div className="flex flex-col justify-between bg-red-200 h-screen p-5 ">
-      <div className="flex flex-col space-y-4 text-lg">
+    <div className="flex md:flex-col justify-between bg-red-200 md:h-screen p-5 ">
+      <div className="flex md:flex-col space-x-4 md:space-x-0 md:space-y-4 text-lg">
         <Link className="hover:text-red-800 hover:font-bold" to="/dashboard">
           All users
         </Link>

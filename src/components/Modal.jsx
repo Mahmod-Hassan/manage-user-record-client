@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
-const Modal = ({ user, setOpenModal }) => {
+const Modal = ({ user, setOpenModal, fetchUsers }) => {
   const [editedData, setEditedData] = useState(user);
-  console.log(editedData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedData({ ...editedData, [name]: value });
@@ -18,7 +17,11 @@ const Modal = ({ user, setOpenModal }) => {
       body: JSON.stringify(editedData),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        if (data.matchedCount > 0) {
+          fetchUsers();
+        }
+      });
   };
 
   return (
