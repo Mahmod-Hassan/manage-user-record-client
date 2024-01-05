@@ -9,7 +9,7 @@ const AllUsers = () => {
 
   // useEffect(() => {
   //   setLoading(true);
-  //   fetch("http://localhost:4000/users")
+  //   fetch("https://manage-user-record.vercel.app/users")
   //     .then((res) => res.json())
   //     .then((data) => {
   //       setLoading(false);
@@ -19,7 +19,7 @@ const AllUsers = () => {
 
   const fetchUsers = () => {
     setLoading(true);
-    fetch("http://localhost:4000/users")
+    fetch("https://manage-user-record.vercel.app/users")
       .then((res) => res.json())
       .then((data) => {
         setLoading(false);

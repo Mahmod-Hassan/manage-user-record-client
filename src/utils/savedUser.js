@@ -1,6 +1,6 @@
 export const savedUser = async (data) => {
   try {
-    const response = await fetch("http://localhost:4000/signup", {
+    const response = await fetch("https://manage-user-record.vercel.app/signup", {
       method: "POST",
       headers: {
         "content-type": "application/json",

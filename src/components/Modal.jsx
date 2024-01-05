@@ -9,7 +9,7 @@ const Modal = ({ user, setOpenModal, fetchUsers }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setOpenModal(false);
-    fetch(`http://localhost:4000/user/${user?.email}`, {
+    fetch(`https://manage-user-record.vercel.app/user/${user?.email}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

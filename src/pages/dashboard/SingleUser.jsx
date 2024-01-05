@@ -10,7 +10,7 @@ const SingleUser = ({ user, fetchUsers }) => {
     const yes = window.confirm("are you sure want ot delete");
     if (yes) {
       setLoading(true);
-      fetch(`http://localhost:4000/users/${id}`, {
+      fetch(`https://manage-user-record.vercel.app/users/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
